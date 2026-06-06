@@ -1,0 +1,694 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --navy:#003580;--navy-light:#1a4a8f;--gold:#c8971e;--gold-light:#f5e6b8;
+    --sage:#4a7c59;--sage-light:#e8f4ec;--stone:#f7f5f0;--ink:#1a1a2e;
+    --muted:#6b7280;--border:rgba(0,53,128,0.12);
+  }
+  body{font-family:'DM Sans',sans-serif;color:var(--ink);background:transparent}
+  .hero{background:linear-gradient(160deg,#003580 0%,#1a4a8f 50%,#0f5a3c 100%);padding:3rem 2rem 2.5rem;text-align:center;position:relative;overflow:hidden}
+  .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+  .hero-tag{display:inline-block;background:rgba(200,151,30,0.25);color:#f5e6b8;border:1px solid rgba(200,151,30,0.4);padding:4px 16px;border-radius:20px;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem}
+  .hero h1{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:700;color:#fff;line-height:1.1;margin-bottom:.5rem}
+  .hero h1 span{color:#f5d068}
+  .hero-sub{color:rgba(255,255,255,0.75);font-size:1rem;font-weight:300;margin-bottom:1.5rem;font-style:italic}
+  .stats-bar{display:flex;justify-content:center;gap:0;flex-wrap:wrap;margin-top:1.5rem}
+  .stat-pill{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);padding:10px 20px;text-align:center;border-right:none}
+  .stat-pill:first-child{border-radius:8px 0 0 8px}
+  .stat-pill:last-child{border-radius:0 8px 8px 0;border-right:1px solid rgba(255,255,255,0.2)}
+  .stat-pill .sv{font-size:1.3rem;font-weight:500;color:#fff;font-family:'Playfair Display',serif}
+  .stat-pill .sl{font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+  .nav-strip{display:flex;overflow-x:auto;background:var(--navy);gap:0;scrollbar-width:none;border-bottom:3px solid var(--gold)}
+  .nav-strip::-webkit-scrollbar{display:none}
+  .nav-btn{flex:none;padding:12px 20px;color:rgba(255,255,255,0.65);font-size:12px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;border:none;background:transparent;white-space:nowrap;transition:all .2s;border-bottom:3px solid transparent;margin-bottom:-3px}
+  .nav-btn.active,.nav-btn:hover{color:#fff;border-bottom-color:var(--gold);background:rgba(255,255,255,0.05)}
+  .section{display:none;padding:2rem;animation:fadeIn .3s ease}
+  .section.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .sec-label{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:.4rem}
+  .sec-title{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--navy);margin-bottom:.3rem}
+  .sec-desc{color:var(--muted);font-size:.9rem;line-height:1.6;margin-bottom:1.5rem}
+  .quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:8px;margin-bottom:1.5rem}
+  .q-card{background:var(--stone);border-radius:10px;padding:14px 16px;border-left:3px solid var(--navy)}
+  .q-card .qn{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px}
+  .q-card .qv{font-size:1rem;font-weight:500;color:var(--navy)}
+  .day-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem;transition:box-shadow .2s}
+  .day-card:hover{box-shadow:0 4px 20px rgba(0,53,128,0.1)}
+  .day-hd{display:flex;align-items:stretch;cursor:pointer}
+  .day-num{background:var(--navy);color:#fff;width:64px;display:flex;align-items:center;justify-content:center;flex-direction:column;flex-shrink:0}
+  .day-num .dn{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;line-height:1}
+  .day-num .dl{font-size:9px;letter-spacing:1px;text-transform:uppercase;opacity:.7}
+  .day-body{padding:14px 16px;flex:1}
+  .day-title{font-weight:500;font-size:1rem;color:var(--navy);margin-bottom:4px}
+  .day-meta{display:flex;flex-wrap:wrap;gap:8px}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+  .badge-blue{background:#e6f0ff;color:#003580}
+  .badge-green{background:var(--sage-light);color:var(--sage)}
+  .badge-gold{background:var(--gold-light);color:#7a5a00}
+  .badge-red{background:#fff0f0;color:#c0392b}
+  .day-arrow{padding:14px 12px;display:flex;align-items:center;color:var(--muted);font-size:18px}
+  .day-detail{display:none;border-top:1px solid var(--border);padding:16px;background:#fafbfd}
+  .day-detail.open{display:block}
+  .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .detail-box{background:#fff;border-radius:8px;padding:12px;border:1px solid var(--border)}
+  .detail-box .db-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:4px}
+  .detail-box .db-val{font-size:.9rem;font-weight:500;color:var(--ink)}
+  .trail-desc{font-size:.875rem;line-height:1.7;color:#374151;margin-top:8px}
+  .water-note{display:flex;align-items:flex-start;gap:8px;background:#e8f4ff;border-radius:8px;padding:10px 12px;margin-top:10px;font-size:.82rem;color:#1a4a8f}
+  .camp-note{display:flex;align-items:flex-start;gap:8px;background:#e8f4ec;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:.82rem;color:var(--sage)}
+  .alt-bar-wrap{margin-top:12px}
+  .alt-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+  .alt-bar-bg{background:#e5e7eb;border-radius:4px;height:8px;overflow:hidden}
+  .alt-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--navy),var(--gold))}
+  .profile-wrap{background:var(--stone);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem}
+  .profile-svg-wrap{width:100%;overflow-x:auto}
+  .difficulty-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+  .diff-card{background:var(--stone);border-radius:10px;padding:1rem}
+  .diff-card h4{font-size:.85rem;font-weight:500;color:var(--navy);margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
+  .diff-card p{font-size:.82rem;color:#4b5563;line-height:1.6}
+  .season-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+  .season-card{border-radius:10px;padding:1rem;border:1px solid var(--border)}
+  .season-best{border-color:var(--sage);background:var(--sage-light)}
+  .season-avoid{border-color:#f0a0a0;background:#fff5f5}
+  .season-ok{border-color:#e0c88a;background:#fdf8ec}
+  .season-card h4{font-size:.875rem;font-weight:500;margin-bottom:.4rem}
+  .season-card p{font-size:.8rem;line-height:1.6;color:#4b5563}
+  .travel-block{background:var(--stone);border-radius:12px;padding:1.2rem;margin-bottom:1rem}
+  .travel-block h3{font-size:1rem;font-weight:500;color:var(--navy);margin-bottom:.6rem;display:flex;align-items:center;gap:8px}
+  .travel-block p,.travel-block li{font-size:.85rem;line-height:1.7;color:#374151}
+  .travel-block ul{padding-left:1rem}
+  .route-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border)}
+  .route-step:last-child{border-bottom:none}
+  .route-dot{width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;margin-top:2px}
+  .route-txt .rt{font-size:.88rem;font-weight:500;color:var(--navy)}
+  .route-txt .rs{font-size:.78rem;color:var(--muted);margin-top:2px}
+  .stay-card{display:flex;gap:12px;background:var(--stone);border-radius:10px;padding:1rem;margin-bottom:.75rem;border-left:4px solid var(--navy)}
+  .stay-icon{width:36px;height:36px;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .stay-card h4{font-size:.9rem;font-weight:500;color:var(--navy);margin-bottom:3px}
+  .stay-card p{font-size:.8rem;color:#4b5563;line-height:1.5}
+  .pack-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+  .pack-cat{background:var(--stone);border-radius:10px;padding:1rem}
+  .pack-cat h4{font-size:.85rem;font-weight:500;color:var(--navy);margin-bottom:.5rem;display:flex;align-items:center;gap:6px}
+  .pack-item{font-size:.8rem;color:#374151;padding:3px 0;border-bottom:1px solid rgba(0,0,0,0.04);display:flex;justify-content:space-between}
+  .pack-item:last-child{border-bottom:none}
+  .pack-qty{color:var(--muted);font-size:.75rem}
+  .fitness-week{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+  .week-card{flex:1;min-width:90px;background:var(--stone);border-radius:10px;padding:.8rem;border-top:3px solid var(--navy)}
+  .week-card .wk{font-size:11px;font-weight:500;color:var(--navy);text-transform:uppercase;letter-spacing:.5px}
+  .week-card p{font-size:.75rem;color:#4b5563;margin-top:.3rem;line-height:1.5}
+  .fauna-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem}
+  .fauna-card{background:var(--stone);border-radius:10px;padding:.9rem;border-left:3px solid var(--sage)}
+  .fauna-card h4{font-size:.85rem;font-weight:500;color:var(--sage);margin-bottom:.3rem}
+  .fauna-card p{font-size:.78rem;color:#4b5563;line-height:1.5}
+  .incl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+  .incl-list li{font-size:.83rem;color:#374151;padding:5px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:6px;list-style:none}
+  .incl-list li:last-child{border-bottom:none}
+  .check-icon{color:var(--sage);flex-shrink:0;font-size:14px;margin-top:1px}
+  .cross-icon{color:#e05a5a;flex-shrink:0;font-size:14px;margin-top:1px}
+  .price-box{background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:14px;padding:1.5rem;text-align:center;color:#fff;margin-bottom:1rem}
+  .price-box .pv{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:#f5d068}
+  .price-box .ps{font-size:.85rem;color:rgba(255,255,255,.7);margin-top:4px}
+  .cancel-card{background:#fff8e6;border-radius:10px;padding:1rem;margin-bottom:.75rem;border-left:4px solid var(--gold)}
+  .cancel-card h4{font-size:.85rem;font-weight:500;color:#7a5a00;margin-bottom:.3rem}
+  .cancel-card p{font-size:.8rem;color:#4b5563;line-height:1.5}
+  .contact-card{background:var(--navy);border-radius:14px;padding:1.5rem;color:#fff;text-align:center;margin-bottom:1rem}
+  .contact-card h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:1rem;color:var(--gold-light)}
+  .contact-item{display:inline-flex;align-items:center;gap:8px;padding:8px 20px;background:rgba(255,255,255,.1);border-radius:20px;margin:4px;font-size:.85rem}
+  .divider{height:1px;background:var(--border);margin:1.5rem 0}
+  .tip-box{background:#fffbf0;border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:10px 14px;margin:8px 0;font-size:.82rem;color:#5a4200;line-height:1.6}
+  .highlight-quote{font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;color:var(--navy);border-left:3px solid var(--gold);padding:8px 16px;margin:1rem 0;line-height:1.5}
+</style>
+
+<div class="hero">
+  <div class="hero-tag">Pajuna Treks · Parvati Valley</div>
+  <h1>Dev<span>roopa</span> Trek</h1>
+  <p class="hero-sub">Land of Deities · Waichin, Himachal Pradesh</p>
+  <div class="stats-bar">
+    <div class="stat-pill"><div class="sv">4,230m</div><div class="sl">Max altitude</div></div>
+    <div class="stat-pill"><div class="sv">5D/6N</div><div class="sl">Duration</div></div>
+    <div class="stat-pill"><div class="sv">25 km</div><div class="sl">Trek distance</div></div>
+    <div class="stat-pill"><div class="sv">482 km</div><div class="sl">Drive (each way)</div></div>
+    <div class="stat-pill"><div class="sv">₹21,900</div><div class="sl">Total cost</div></div>
+  </div>
+</div>
+
+<div class="nav-strip" id="nav">
+  <button class="nav-btn active" data-sec="itinerary">Quick Itinerary</button>
+  <button class="nav-btn" data-sec="daywise">Day-by-Day Guide</button>
+  <button class="nav-btn" data-sec="altprofile">Altitude Profile</button>
+  <button class="nav-btn" data-sec="difficulty">Difficulty & Terrain</button>
+  <button class="nav-btn" data-sec="besttime">Best Time</button>
+  <button class="nav-btn" data-sec="travel">How to Reach</button>
+  <button class="nav-btn" data-sec="stay">Stay & Food</button>
+  <button class="nav-btn" data-sec="flora">Flora & Fauna</button>
+  <button class="nav-btn" data-sec="pack">What to Pack</button>
+  <button class="nav-btn" data-sec="fitness">Get Fit</button>
+  <button class="nav-btn" data-sec="booking">Booking & Cost</button>
+</div>
+
+<!-- QUICK ITINERARY -->
+<div class="section active" id="itinerary">
+  <div class="sec-label">Overview</div>
+  <div class="sec-title">Quick Itinerary</div>
+  <div class="sec-desc">6 days, 5 nights. Your journey from Delhi to the divine meadows of Devroopa at 4,230m and back.</div>
+  <div class="quick-grid" style="grid-template-columns:repeat(3,1fr)">
+    <div class="q-card"><div class="qn">Trek Distance</div><div class="qv">~25 km total</div></div>
+    <div class="q-card"><div class="qn">Max Altitude</div><div class="qv">4,230 m (Devroopa)</div></div>
+    <div class="q-card"><div class="qn">Difficulty</div><div class="qv">Easy to Moderate</div></div>
+    <div class="q-card"><div class="qn">Drive (one way)</div><div class="qv">482 km · 11 hrs</div></div>
+    <div class="q-card"><div class="qn">Base Village</div><div class="qv">Waichin, Parvati Valley</div></div>
+    <div class="q-card"><div class="qn">Trek Operator</div><div class="qv">Pajuna Treks</div></div>
+  </div>
+
+  <div style="margin-top:.5rem">
+    <div style="display:flex;flex-direction:column;gap:0">
+      <div class="route-step"><div class="route-dot">1</div><div class="route-txt"><div class="rt">Delhi → Waichin</div><div class="rs">Overnight bus/traveller · 482 km · 11 hrs · Delhi at 216m → Waichin at ~2,500m</div></div></div>
+      <div class="route-step"><div class="route-dot">2</div><div class="route-txt"><div class="rt">Explore Waichin Village</div><div class="rs">Easy acclimatisation day · Malana Dam hike · 2,800m · Homestay night</div></div></div>
+      <div class="route-step"><div class="route-dot">3</div><div class="route-txt"><div class="rt">Waichin → Mota Grahan</div><div class="rs">5 km · 5 hrs · Easy-Moderate · 3,200m · 3× river crossings · Camp night</div></div></div>
+      <div class="route-step"><div class="route-dot">4</div><div class="route-txt"><div class="rt">Mota Grahan → Bhagdi</div><div class="rs">6 km · 6 hrs · Moderate · 3,800m · Malana shepherd meadows · Camp night</div></div></div>
+      <div class="route-step"><div class="route-dot">5</div><div class="route-txt"><div class="rt">Bhagdi → Devroopa → Gullas</div><div class="rs">7 km · 6 hrs · Easy-Moderate · 4,200m summit · Camp at Gullas overnight</div></div></div>
+      <div class="route-step" style="border:none"><div class="route-dot">6</div><div class="route-txt"><div class="rt">Descent → Waichin → Kasol → Delhi</div><div class="rs">7 km descent · Kasol stopover · 482 km drive back · 12 hrs</div></div></div>
+    </div>
+  </div>
+  <div class="highlight-quote">"One such place is Devroopa, 'The Land of Gods'. A land of vast meadows, vibrant flora and fauna and awe-inspiring Himalayan views."</div>
+</div>
+
+<!-- DAY-BY-DAY -->
+<div class="section" id="daywise">
+  <div class="sec-label">Complete Guide</div>
+  <div class="sec-title">How Each Day Looks</div>
+  <div class="sec-desc">Tap any day to expand full details — terrain, altitude gained, water sources, campsites and what to expect.</div>
+
+  <!-- Day 1 -->
+  <div class="day-card">
+    <div class="day-hd" onclick="toggleDay(this)">
+      <div class="day-num" style="background:#003580"><div class="dn">01</div><div class="dl">Day</div></div>
+      <div class="day-body">
+        <div class="day-title">Delhi → Waichin (Drive)</div>
+        <div class="day-meta">
+          <span class="badge badge-blue"><i class="ti ti-car" aria-hidden="true"></i> 482 km drive</span>
+          <span class="badge badge-gold"><i class="ti ti-clock" aria-hidden="true"></i> ~11 hours</span>
+          <span class="badge badge-green">216m → ~2,500m</span>
+        </div>
+      </div>
+      <div class="day-arrow"><i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+    </div>
+    <div class="day-detail">
+      <div class="detail-grid">
+        <div class="detail-box"><div class="db-label">Start altitude</div><div class="db-val">216 m (Delhi)</div></div>
+        <div class="detail-box"><div class="db-label">End altitude</div><div class="db-val">~2,500 m (Waichin)</div></div>
+        <div class="detail-box"><div class="db-label">Mode</div><div class="db-val">Private traveller / bus</div></div>
+        <div class="detail-box"><div class="db-label">Night stay</div><div class="db-val">Travel overnight in vehicle</div></div>
+      </div>
+      <div class="trail-desc">The group gathers in Delhi as evening falls and boards a comfortable traveller/bus for the overnight drive to Waichin, a serene and remote village nestled in the heart of Parvati Valley. You sleep as you travel, waking up in the mountains — a classic Himalayan overnight journey. The drive passes through Chandigarh, Mandi, Kullu, Bhuntar, Kasol, and then up to Waichin via the Malana Dam road.</div>
+      <div class="tip-box"><i class="ti ti-bulb" aria-hidden="true"></i> Tip: Eat light before departure. Carry a neck pillow and a light jacket for the bus. Pack snacks — there are no stops for meals included on this drive.</div>
+    </div>
+  </div>
+
+  <!-- Day 2 -->
+  <div class="day-card">
+    <div class="day-hd" onclick="toggleDay(this)">
+      <div class="day-num"><div class="dn">02</div><div class="dl">Day</div></div>
+      <div class="day-body">
+        <div class="day-title">Explore Waichin Village (Acclimatisation)</div>
+        <div class="day-meta">
+          <span class="badge badge-green">Altitude: 2,800m</span>
+          <span class="badge badge-gold">Level: Easy</span>
+          <span class="badge badge-blue">~1 hr gentle hike</span>
+        </div>
+      </div>
+      <div class="day-arrow"><i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+    </div>
+    <div class="day-detail">
+      <div class="detail-grid">
+        <div class="detail-box"><div class="db-label">Altitude</div><div class="db-val">2,800 m</div></div>
+        <div class="detail-box"><div class="db-label">Difficulty</div><div class="db-val">Easy</div></div>
+        <div class="detail-box"><div class="db-label">Night stay</div><div class="db-val">Waichin Homestay</div></div>
+        <div class="detail-box"><div class="db-label">Altitude gained</div><div class="db-val">~300 m (from village base)</div></div>
+      </div>
+      <div class="trail-desc">Arrive in Waichin — described as one of the most beautiful and peaceful villages in all of Parvati Valley. The day begins gently: watch fog drift across the ridges, observe weather patterns, and let the Himalayas sink in. The acclimatisation activity involves reaching Malana Dam (a short drive/walk), then hiking for approximately one hour alongside a crystal-clear tributary of the Parvati River — one of the cleanest streams in the region. The day also includes a deep dive into Malana village culture: learn how villagers adapt to extreme high-altitude climate, and hear the mysterious, legendary tales of Malana's ancient republic.</div>
+      <div class="water-note"><i class="ti ti-droplet" aria-hidden="true"></i><span><strong>Water source:</strong> Parvati River tributary flowing through Waichin. The stream is described as one of the cleanest in the valley.</span></div>
+      <div class="camp-note"><i class="ti ti-home" aria-hidden="true"></i><span><strong>Campsite/Stay:</strong> Twin-sharing homestay in Waichin village. First proper bed of the trip — rest well.</span></div>
+    </div>
+  </div>
+
+  <!-- Day 3 -->
+  <div class="day-card">
+    <div class="day-hd" onclick="toggleDay(this)">
+      <div class="day-num"><div class="dn">03</div><div class="dl">Day</div></div>
+      <div class="day-body">
+        <div class="day-title">Waichin → Mota Grahan</div>
+        <div class="day-meta">
+          <span class="badge badge-blue">5 km trek</span>
+          <span class="badge badge-gold">5 hours</span>
+          <span class="badge badge-green">3,200m</span>
+          <span class="badge badge-red">Easy–Moderate</span>
+        </div>
+      </div>
+      <div class="day-arrow"><i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+    </div>
+    <div class="day-detail">
+      <div class="detail-grid">
+        <div class="detail-box"><div class="db-label">Start altitude</div><div class="db-val">2,800 m (Waichin)</div></div>
+        <div class="detail-box"><div class="db-label">End altitude</div><div class="db-val">3,200 m (Mota Grahan)</div></div>
+        <div class="detail-box"><div class="db-label">Altitude gained</div><div class="db-val">+400 m</div></div>
+        <div class="detail-box"><div class="db-label">Trek distance</div><div class="db-val">5 km · 5 hours</div></div>
+      </div>
+      <div class="trail-desc">The first real trekking day. The trail begins with a gentle walk through lush green meadows alongside the calming flow of the river. As the path deepens into forest, trekkers will cross rivers — three times in total. The forest is dense and quiet; the sound of the flowing river, forest silence, and distant waterfalls become constant companions. Mota Grahan itself is a barely-touched valley — a wide, open, untouched space that catches first-time trekkers completely off guard with its beauty.</div>
+      <div class="water-note"><i class="ti ti-droplet" aria-hidden="true"></i><span><strong>Water sources:</strong> River running alongside the trail for much of this section. Three river crossing points. Refill at crossings.</span></div>
+      <div class="camp-note"><i class="ti ti-tent" aria-hidden="true"></i><span><strong>Campsite:</strong> Mota Grahan valley — twin-sharing glamping tent with insulation mattress, sleeping bag, lantern and camping pillow provided.</span></div>
+      <div class="alt-bar-wrap"><div class="alt-label">Altitude gain visual (2800m → 3200m)</div><div class="alt-bar-bg"><div class="alt-bar-fill" style="width:42%"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Day 4 -->
+  <div class="day-card">
+    <div class="day-hd" onclick="toggleDay(this)">
+      <div class="day-num" style="background:#1a4a8f"><div class="dn">04</div><div class="dl">Day</div></div>
+      <div class="day-body">
+        <div class="day-title">Mota Grahan → Bhagdi</div>
+        <div class="day-meta">
+          <span class="badge badge-blue">6 km trek</span>
+          <span class="badge badge-gold">6 hours</span>
+          <span class="badge badge-green">3,800m</span>
+          <span class="badge badge-red">Moderate</span>
+        </div>
+      </div>
+      <div class="day-arrow"><i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+    </div>
+    <div class="day-detail">
+      <div class="detail-grid">
+        <div class="detail-box"><div class="db-label">Start altitude</div><div class="db-val">3,200 m (Mota Grahan)</div></div>
+        <div class="detail-box"><div class="db-label">End altitude</div><div class="db-val">3,800 m (Bhagdi)</div></div>
+        <div class="detail-box"><div class="db-label">Altitude gained</div><div class="db-val">+600 m</div></div>
+        <div class="detail-box"><div class="db-label">Trek distance</div><div class="db-val">6 km · 6 hours</div></div>
+      </div>
+      <div class="trail-desc">After breakfast at camp, the group sets off for Bhagdi — a sacred meadow that is home to Malana shepherds throughout summer. The terrain becomes progressively more lush and vibrant as you gain altitude. This section is renowned for an extraordinary variety of wildflowers, many found nowhere else on earth — and some that have not yet been formally named by botanists. As you approach Bhagdi, the path steepens with a steady ascent. Crystal-clear streams flow everywhere here, so perfectly transparent they seem unreal. The land feels energetically alive underfoot. Bhagdi is a peak of pastoral beauty.</div>
+      <div class="water-note"><i class="ti ti-droplet" aria-hidden="true"></i><span><strong>Water sources:</strong> Multiple crystal-clear streams throughout this section. Described in the PDF as "flowing like something out of a movie." Abundant water — best to carry bottles but refill points are plentiful.</span></div>
+      <div class="camp-note"><i class="ti ti-tent" aria-hidden="true"></i><span><strong>Campsite:</strong> Bhagdi meadow — open sky glamping camp in the sacred Malana shepherd grounds at 3,800m.</span></div>
+      <div class="alt-bar-wrap"><div class="alt-label">Altitude gain visual (3200m → 3800m)</div><div class="alt-bar-bg"><div class="alt-bar-fill" style="width:65%"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Day 5 -->
+  <div class="day-card">
+    <div class="day-hd" onclick="toggleDay(this)">
+      <div class="day-num" style="background:#0f5a3c"><div class="dn">05</div><div class="dl">Day</div></div>
+      <div class="day-body">
+        <div class="day-title">Bhagdi → Devroopa → Gullas (Summit Day!)</div>
+        <div class="day-meta">
+          <span class="badge badge-blue">7 km trek</span>
+          <span class="badge badge-gold">6 hours</span>
+          <span class="badge badge-green">4,200m summit</span>
+          <span class="badge badge-red">Easy–Moderate</span>
+        </div>
+      </div>
+      <div class="day-arrow"><i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+    </div>
+    <div class="day-detail">
+      <div class="detail-grid">
+        <div class="detail-box"><div class="db-label">Start altitude</div><div class="db-val">3,800 m (Bhagdi)</div></div>
+        <div class="detail-box"><div class="db-label">Devroopa altitude</div><div class="db-val">4,200–4,230 m</div></div>
+        <div class="detail-box"><div class="db-label">Altitude gained</div><div class="db-val">+400–430 m</div></div>
+        <div class="detail-box"><div class="db-label">Overnight camp</div><div class="db-val">Gullas (descent from summit)</div></div>
+      </div>
+      <div class="trail-desc">The summit day. An early start — the 2-hour climb to Devroopa from Bhagdi. The trail is so enchanting that the trek leader walks barefoot, feeling the soft cool grass underfoot. Rather than tiring, each step feels energising. The entire trail to Devroopa is lined with vibrant, antioxidant-rich wildflowers. At the summit, the peaks of Gherwakoti — "the emperor's palace" — dominate the skyline. The vast Devroopa meadow, the most sacred spot of the entire trek, opens up at 4,200m in all its overwhelming, wordless beauty. After spending time at the summit, the group descends to Gullas for the overnight camp.</div>
+      <div class="water-note"><i class="ti ti-droplet" aria-hidden="true"></i><span><strong>Water sources:</strong> High-altitude meadow streams and glacial meltwater channels at Devroopa. The landscape is filled with small rivulets fed by snowmelt.</span></div>
+      <div class="camp-note"><i class="ti ti-tent" aria-hidden="true"></i><span><strong>Campsite:</strong> Gullas — overnight glamping camp after descending from Devroopa summit. This is the highest and most remote camp on the trek.</span></div>
+      <div class="alt-bar-wrap"><div class="alt-label">Altitude gain visual (3800m → 4230m)</div><div class="alt-bar-bg"><div class="alt-bar-fill" style="width:90%"></div></div></div>
+      <div class="tip-box"><i class="ti ti-mountain" aria-hidden="true"></i> Summit tip: Start early (before 7am) for the clearest skies and best views. High-altitude wind picks up after noon. The barefoot walk is optional but deeply recommended for the sensory experience.</div>
+    </div>
+  </div>
+
+  <!-- Day 6 -->
+  <div class="day-card">
+    <div class="day-hd" onclick="toggleDay(this)">
+      <div class="day-num"><div class="dn">06</div><div class="dl">Day</div></div>
+      <div class="day-body">
+        <div class="day-title">Gullas → Waichin → Kasol → Delhi (Descent + Drive)</div>
+        <div class="day-meta">
+          <span class="badge badge-blue">7 km descent</span>
+          <span class="badge badge-gold">6 hrs trek + 12 hrs drive</span>
+          <span class="badge badge-green">Down to 2,500m</span>
+          <span class="badge badge-red">Moderate descent</span>
+        </div>
+      </div>
+      <div class="day-arrow"><i class="ti ti-chevron-down" aria-hidden="true"></i></div>
+    </div>
+    <div class="day-detail">
+      <div class="detail-grid">
+        <div class="detail-box"><div class="db-label">Start altitude</div><div class="db-val">~4,200 m (Gullas)</div></div>
+        <div class="detail-box"><div class="db-label">End altitude</div><div class="db-val">~216 m (Delhi)</div></div>
+        <div class="detail-box"><div class="db-label">Trek distance</div><div class="db-val">7 km descent · 6 hrs</div></div>
+        <div class="detail-box"><div class="db-label">Drive back</div><div class="db-val">482 km · ~12 hrs</div></div>
+      </div>
+      <div class="trail-desc">The final trekking day. The descent follows the river all the way down to Malana Dam, a 7 km mindful walk. The leave-no-trace philosophy is observed — every trekker carries out what they brought in. On reaching the dam gates, the group drives through Kasol (a brief exploration of the famous Parvati Valley town), before beginning the overnight drive back to Delhi. Arrive in Delhi the next morning with new friendships, transformed perspectives, and memories of the Land of Gods.</div>
+      <div class="water-note"><i class="ti ti-droplet" aria-hidden="true"></i><span><strong>Water:</strong> River runs alongside the descent trail all the way to Malana Dam — ample refill opportunities. Carry extra for the drive.</span></div>
+      <div class="camp-note"><i class="ti ti-car" aria-hidden="true"></i><span><strong>Night:</strong> Overnight drive back to Delhi. Kasol stopover for food and exploration before departure.</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ALTITUDE PROFILE -->
+<div class="section" id="altprofile">
+  <div class="sec-label">Numbers at a Glance</div>
+  <div class="sec-title">Altitude Profile</div>
+  <div class="sec-desc">Complete altitude progression across all 6 days, from sea-level Delhi to the 4,230m Devroopa summit.</div>
+  <div class="profile-wrap">
+    <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto">
+      <defs>
+        <linearGradient id="fillGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#003580" stop-opacity="0.18"/>
+          <stop offset="100%" stop-color="#003580" stop-opacity="0.02"/>
+        </linearGradient>
+      </defs>
+      <!-- grid lines -->
+      <line x1="60" y1="20" x2="620" y2="20" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="60" y1="70" x2="620" y2="70" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="60" y1="120" x2="620" y2="120" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="60" y1="170" x2="620" y2="170" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,4"/>
+      <line x1="60" y1="220" x2="620" y2="220" stroke="#e5e7eb" stroke-width="1" stroke-dasharray="4,4"/>
+      <!-- altitude labels -->
+      <text x="52" y="24" text-anchor="end" font-size="10" fill="#9ca3af">4500m</text>
+      <text x="52" y="74" text-anchor="end" font-size="10" fill="#9ca3af">4000m</text>
+      <text x="52" y="124" text-anchor="end" font-size="10" fill="#9ca3af">3500m</text>
+      <text x="52" y="174" text-anchor="end" font-size="10" fill="#9ca3af">3000m</text>
+      <text x="52" y="224" text-anchor="end" font-size="10" fill="#9ca3af">2500m</text>
+      <!-- fill area: points scaled: 216→~240, 2500→222, 2800→196, 3200→160, 3800→100, 4230→56, 4200→62, 2500→222, 216→240 -->
+      <polygon points="60,248 150,222 235,196 320,160 405,100 490,56 550,62 620,222 620,248 60,248" fill="url(#fillGrad)"/>
+      <!-- line -->
+      <polyline points="60,248 150,222 235,196 320,160 405,100 490,56 550,62 620,222" fill="none" stroke="#003580" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- dots -->
+      <circle cx="60" cy="248" r="5" fill="#003580"/>
+      <circle cx="150" cy="222" r="5" fill="#003580"/>
+      <circle cx="235" cy="196" r="5" fill="#003580"/>
+      <circle cx="320" cy="160" r="5" fill="#003580"/>
+      <circle cx="405" cy="100" r="5" fill="#003580"/>
+      <circle cx="490" cy="56" r="6" fill="#c8971e" stroke="#003580" stroke-width="2"/>
+      <circle cx="550" cy="62" r="5" fill="#003580"/>
+      <circle cx="620" cy="222" r="5" fill="#003580"/>
+      <!-- day labels -->
+      <text x="60" y="266" text-anchor="middle" font-size="9" fill="#6b7280">D1</text>
+      <text x="150" y="266" text-anchor="middle" font-size="9" fill="#6b7280">D2</text>
+      <text x="235" y="266" text-anchor="middle" font-size="9" fill="#6b7280">D3</text>
+      <text x="320" y="266" text-anchor="middle" font-size="9" fill="#6b7280">D4</text>
+      <text x="405" y="266" text-anchor="middle" font-size="9" fill="#6b7280">D5 up</text>
+      <text x="490" y="266" text-anchor="middle" font-size="9" fill="#c8971e" font-weight="500">Summit</text>
+      <text x="550" y="266" text-anchor="middle" font-size="9" fill="#6b7280">Gullas</text>
+      <text x="620" y="266" text-anchor="middle" font-size="9" fill="#6b7280">D6</text>
+      <!-- altitude value labels -->
+      <text x="60" y="244" text-anchor="middle" font-size="8" fill="#003580">216m</text>
+      <text x="150" y="218" text-anchor="middle" font-size="8" fill="#003580">2500m</text>
+      <text x="235" y="192" text-anchor="middle" font-size="8" fill="#003580">2800m</text>
+      <text x="320" y="156" text-anchor="middle" font-size="8" fill="#003580">3200m</text>
+      <text x="405" y="96" text-anchor="middle" font-size="8" fill="#003580">3800m</text>
+      <text x="490" y="48" text-anchor="middle" font-size="9" fill="#c8971e" font-weight="500">4230m</text>
+      <text x="550" y="58" text-anchor="middle" font-size="8" fill="#003580">4200m</text>
+    </svg>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:1rem">
+    <div class="detail-box"><div class="db-label">Total altitude gain</div><div class="db-val">+4,014 m from Delhi</div></div>
+    <div class="detail-box"><div class="db-label">Biggest single-day gain</div><div class="db-val">Day 4: +600m</div></div>
+    <div class="detail-box"><div class="db-label">Summit altitude</div><div class="db-val">4,230m (Devroopa)</div></div>
+    <div class="detail-box"><div class="db-label">Day 3 gain</div><div class="db-val">+400m (2800→3200m)</div></div>
+    <div class="detail-box"><div class="db-label">Day 5 gain</div><div class="db-val">+430m (3800→4230m)</div></div>
+    <div class="detail-box"><div class="db-label">Day 6 descent</div><div class="db-val">−1,730m to valley</div></div>
+  </div>
+</div>
+
+<!-- DIFFICULTY -->
+<div class="section" id="difficulty">
+  <div class="sec-label">Know Before You Go</div>
+  <div class="sec-title">Difficulty & Terrain</div>
+  <div class="sec-desc">Overall grading: Easy to Moderate. No technical climbing. No ropes or crampons required. But altitude demands respect.</div>
+  <div class="difficulty-grid">
+    <div class="diff-card"><h4><i class="ti ti-mountain" style="color:var(--navy)" aria-hidden="true"></i>Terrain</h4><p>Lush green meadows, dense Himalayan forest, 3 river crossings on Day 3, steadily steepening trails on Days 4–5. No loose scree or technical rock sections. Day 5 approach to Devroopa is a soft grass walk — genuinely suitable for barefoot walking in good conditions.</p></div>
+    <div class="diff-card"><h4><i class="ti ti-temperature" style="color:#c0392b" aria-hidden="true"></i>Altitude</h4><p>Highest point is 4,230m. Altitude sickness can affect anyone regardless of fitness. Day 2 acclimatisation at 2,800m is mandatory and built in. Watch for headaches, nausea, and breathlessness on Days 4–5. Descend immediately if symptoms worsen.</p></div>
+    <div class="diff-card"><h4><i class="ti ti-cloud-storm" style="color:#1a4a8f" aria-hidden="true"></i>Weather</h4><p>Parvati Valley weather is unpredictable. Summer days can be warm (15–22°C at base, 5–12°C at altitude). Nights drop to near 0°C at high camps. Monsoon (July–Sept) brings rain and slippery trails. Storms can arrive suddenly in the afternoon.</p></div>
+    <div class="diff-card"><h4><i class="ti ti-activity" style="color:var(--sage)" aria-hidden="true"></i>Fitness level</h4><p>Suitable for first-time trekkers with basic fitness. Daily hikes range from 5–7 km over 5–6 hours. The key challenges are altitude gain on Day 4 (+600m) and the sustained 4,200m altitude on Day 5. Regular walking/jogging 3× per week for 6 weeks beforehand is sufficient preparation.</p></div>
+    <div class="diff-card"><h4><i class="ti ti-first-aid-kit" style="color:#c8971e" aria-hidden="true"></i>Safety</h4><p>Trek guide, cook and porters are included. First aid box provided at camp. Pajuna's bio-toilet tents are set up at each campsite. Leave-no-trace policy strictly followed on descent. In case of medical emergency, evacuation route is via Malana Dam to Kasol hospital.</p></div>
+    <div class="diff-card"><h4><i class="ti ti-shoe" style="color:#003580" aria-hidden="true"></i>River crossings</h4><p>Day 3 involves 3 river crossings through the Parvati tributary. These are walk-through crossings (not rope bridges). Water level varies by season. In peak monsoon, crossings can be knee-deep. Waterproof trekking shoes are essential.</p></div>
+  </div>
+  <div class="tip-box">Overall verdict: If you can walk 8–10 km a day over moderate hills and are comfortable sleeping in tents at cold temperatures, you can do this trek. The rating "Easy to Moderate" on summit day reflects the soft terrain, not the altitude.</div>
+</div>
+
+<!-- BEST TIME -->
+<div class="section" id="besttime">
+  <div class="sec-label">Plan Your Visit</div>
+  <div class="sec-title">Best Time to Do the Devroopa Trek</div>
+  <div class="sec-desc">The trek is in Parvati Valley, Himachal Pradesh. Season timing is critical here — the valley sits at mid-Himalayan elevation with distinct seasonal moods.</div>
+  <div class="season-grid">
+    <div class="season-card season-best"><h4 style="color:var(--sage)">✦ Peak Season: June–July</h4><p>The PDF's summer photography shows green meadows carpeted in pink and yellow wildflowers. This is when Devroopa is at its most spectacular — blooms everywhere, clear skies, long daylight hours, streams flowing at full strength. Bhagdi's unnamed flowers are at peak bloom. Temperatures at altitude: 8–15°C daytime, 0–5°C nights.</p></div>
+    <div class="season-card season-best"><h4 style="color:var(--sage)">✦ Good Season: May & Early Sept</h4><p>May offers snow patches at higher elevations for dramatic views. Early September sees fewer crowds with meadows still lush. Cooler temperatures and possibly some late-monsoon showers but generally manageable. The Gherwakoti peak views are clearest in September.</p></div>
+    <div class="season-card season-ok"><h4 style="color:#7a5a00">~ Possible: October (Winter edge)</h4><p>The PDF's winter section shows the entire landscape transformed under deep snow — particularly the Gherwakoti peak face. October is the transition into winter. Trail becomes progressively harder; river crossings more treacherous. Experienced trekkers only in October. Stunning white landscapes but require full winter gear.</p></div>
+    <div class="season-card season-avoid"><h4 style="color:#c0392b">✗ Avoid: Aug (heavy monsoon) & Nov–Apr</h4><p>August brings peak monsoon to Parvati Valley — river levels dangerous, leeches present, trails slippery, visibility poor. November through April the trail is under heavy snowpack and inaccessible without specialised equipment. Pajuna operates the trek primarily in summer season.</p></div>
+  </div>
+  <div class="tip-box"><i class="ti ti-calendar" aria-hidden="true"></i> <strong>Sweet spot recommendation:</strong> June 15 – July 15 for maximum wildflower bloom and clearest summit views. Book at least 4–6 weeks in advance for these dates.</div>
+</div>
+
+<!-- TRAVEL -->
+<div class="section" id="travel">
+  <div class="sec-label">Getting There</div>
+  <div class="sec-title">How to Plan Your Travel</div>
+  <div class="sec-desc">Pajuna includes Delhi-to-Delhi transport in the package. But here's the complete travel context for all routes.</div>
+  <div class="travel-block">
+    <h3><i class="ti ti-bus" aria-hidden="true"></i> Included: Delhi pickup (Day 1 evening)</h3>
+    <p>Private taxi and Bolero Tempo are included for all 7 days of the package. The group departs Delhi as night falls, travelling overnight to Waichin. Pickup point coordinates to be shared by Pajuna on booking confirmation.</p>
+  </div>
+  <div class="travel-block">
+    <h3><i class="ti ti-plane" aria-hidden="true"></i> Flying to Delhi</h3>
+    <ul>
+      <li>Fly into Indira Gandhi International Airport (DEL), New Delhi</li>
+      <li>Nearest alternative: Bhuntar Airport (KUU), Kullu — 65km from Kasol (if you prefer to fly closer; not included in package pickup)</li>
+      <li>From Bhuntar: Taxi to Kasol ~1.5 hrs, then to Waichin ~30 min</li>
+    </ul>
+  </div>
+  <div class="travel-block">
+    <h3><i class="ti ti-train" aria-hidden="true"></i> Train to nearby railheads</h3>
+    <ul>
+      <li>Chandigarh (CDG) — ~290 km from Kasol. Well-connected to Delhi (3–5 hrs). Bus or taxi onward to Kasol.</li>
+      <li>Ambala Cantonment (UMB) — for those coming from North India</li>
+      <li>Pathankot — northern railhead with bus connections into Himachal</li>
+    </ul>
+  </div>
+  <div class="travel-block">
+    <h3><i class="ti ti-map-pin" aria-hidden="true"></i> Road route: Delhi → Waichin</h3>
+    <div style="margin-top:.5rem">
+      <div class="route-step"><div class="route-dot" style="background:var(--sage);font-size:9px">DEL</div><div class="route-txt"><div class="rt">Delhi (216m)</div><div class="rs">Start point — NH44/NH21 route north</div></div></div>
+      <div class="route-step"><div class="route-dot" style="font-size:9px">CHD</div><div class="route-txt"><div class="rt">Chandigarh (~260 km, ~4 hrs)</div><div class="rs">Possible breakfast stop</div></div></div>
+      <div class="route-step"><div class="route-dot" style="font-size:9px">MND</div><div class="route-txt"><div class="rt">Mandi (~370 km)</div><div class="rs">Junction for Kullu-Manali highway</div></div></div>
+      <div class="route-step"><div class="route-dot" style="font-size:9px">KSL</div><div class="route-txt"><div class="rt">Kasol (~440 km)</div><div class="rs">Famous Parvati Valley town — last ATM, pharmacy, phone signal</div></div></div>
+      <div class="route-step" style="border:none"><div class="route-dot" style="background:var(--gold);color:#000;font-size:9px">WCH</div><div class="route-txt"><div class="rt">Waichin, Parvati Valley (482 km total)</div><div class="rs">Via Malana Dam road — your base village</div></div></div>
+    </div>
+  </div>
+  <div class="tip-box">Important: Waichin is a remote, internet-free village. Stock up on cash, medicines, and any personal supplies at Kasol (last town). Mobile signal is very limited beyond Kasol.</div>
+</div>
+
+<!-- STAY & FOOD -->
+<div class="section" id="stay">
+  <div class="sec-label">On the Trail</div>
+  <div class="sec-title">The Pajuna Camping Experience</div>
+  <div class="sec-desc">Stay, food, toilets and safety — everything Pajuna provides is thoughtfully curated for comfort in the wild.</div>
+
+  <div style="margin-bottom:1rem">
+    <div class="stay-card" style="border-left-color:#c8971e"><div class="stay-icon" style="background:#c8971e"><i class="ti ti-home" aria-hidden="true"></i></div><div><h4>Day 2 — Waichin Homestay</h4><p>Twin-sharing homestay room in a Waichin village home. A warm, culturally immersive first night — sleep in an actual mountain home, eat local food, experience Himalayan village life.</p></div></div>
+    <div class="stay-card"><div class="stay-icon"><i class="ti ti-tent" aria-hidden="true"></i></div><div><h4>Days 3, 4, 5 — Glamping Tents</h4><p>Twin-sharing glamping tents at Mota Grahan (3,200m), Bhagdi (3,800m) and Gullas (~4,200m). Every tent includes: insulation mattress, personal sleeping bag, lantern, and camping pillow. Pajuna's signature setup — not just survival camping, proper comfort at altitude.</p></div></div>
+    <div class="stay-card" style="border-left-color:var(--sage)"><div class="stay-icon" style="background:var(--sage)"><i class="ti ti-leaf" aria-hidden="true"></i></div><div><h4>Pajuna Bio-Toilet at Every Camp</h4><p>Pajuna's patented quick bio-toilet setup: water conservation, odour control, composting process. Hygienic, eco-friendly and sustainable — a thoughtful solution for wilderness sanitation that leaves no trace.</p></div></div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="sec-label" style="margin-bottom:.3rem">Food Policy</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1rem">
+    <div class="detail-box"><div class="db-label">Cuisine</div><div class="db-val">Pure vegetarian</div></div>
+    <div class="detail-box"><div class="db-label">Meals covered</div><div class="db-val">Day 1 dinner → Day 6 breakfast</div></div>
+    <div class="detail-box"><div class="db-label">Daily meals</div><div class="db-val">Morning tea, Breakfast, Lunch, Evening tea, Dinner</div></div>
+    <div class="detail-box"><div class="db-label">Food philosophy</div><div class="db-val">No packed food — all fresh, nutritious, trail-cooked</div></div>
+  </div>
+  <div class="tip-box">Pajuna's meals are specifically designed for trekking — high in protein, fibre, carbohydrates and nutrient-dense nuts to fuel altitude exertion. This is not roadside dal-rice; it's trek nutrition done right. A dedicated cook travels with the group.</div>
+</div>
+
+<!-- FLORA & FAUNA -->
+<div class="section" id="flora">
+  <div class="sec-label">Natural World</div>
+  <div class="sec-title">Flora & Fauna of the Devroopa Trek</div>
+  <div class="sec-desc">The trail passes through three distinct vegetation zones, each richer than the last. The PDF repeatedly highlights the extraordinary biodiversity of this valley.</div>
+
+  <div style="margin-bottom:1rem">
+    <div class="sec-label" style="font-size:9px">Flora zones</div>
+    <div class="fauna-grid">
+      <div class="fauna-card"><h4>Waichin Valley (2,500–2,800m)</h4><p>Dense ferns (visible in PDF images), broad-leafed forest trees, rhododendrons in bloom (red flowering tree in PDF summer gallery), wild iris (purple iris photographed in PDF Day 1 section), abundant forest undergrowth. Lush and green in monsoon.</p></div>
+      <div class="fauna-card"><h4>Mota Grahan to Bhagdi (3,200–3,800m)</h4><p>Sub-alpine meadows begin. Transition from forest to open grassland. Wild blue forget-me-nots (photographed in PDF), unnamed Himalayan wildflowers that exist nowhere else. Medicinal herbs common in Malana shepherd territory.</p></div>
+      <div class="fauna-card"><h4>Bhagdi to Devroopa (3,800–4,230m)</h4><p>The crown jewel. The PDF specifically calls out "vibrant, antioxidant-rich flowers" lining the entire trail. Pink wildflowers carpet the meadow in the iconic Devroopa photograph. Some species are so rare they haven't been formally named yet — a true botanical frontier.</p></div>
+      <div class="fauna-card"><h4>Signature Species Mentioned</h4><p>Purple iris, blue forget-me-nots, pink alpine wildflowers (carpet bloom at Devroopa), rhododendrons, wild blue Himalayan poppies (likely), medicinal antioxidant flowering plants, dense fern beds in valley.</p></div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:1rem">
+    <div class="sec-label" style="font-size:9px">Fauna</div>
+    <div class="fauna-grid">
+      <div class="fauna-card" style="border-left-color:#c8971e"><h4>Livestock & Domestic</h4><p>Malana shepherds graze sheep and goats at Bhagdi throughout summer. Sheep herds are visible in the valley (PDF Day 1 photo). Mountain dogs are common at shepherd camps — the PDF shows a brown mountain dog resting in yellow wildflowers at Devroopa meadow.</p></div>
+      <div class="fauna-card" style="border-left-color:#c8971e"><h4>Birds</h4><p>Parvati Valley is known for Himalayan Monal (state bird of HP), Koklass Pheasant, Cheer Pheasant, various raptors including Himalayan Griffon vultures soaring above meadows. The forest section (Day 3) is richest for bird sightings.</p></div>
+      <div class="fauna-card" style="border-left-color:#c8971e"><h4>Mammals (Regional)</h4><p>Parvati Valley is known habitat for Himalayan Brown Bear, Snow Leopard (rare, high altitude), Bharal (Blue Sheep) at elevations above 4,000m, Marmots, and various small mammals. Himalayan Tahr possible on rocky slopes near Devroopa.</p></div>
+      <div class="fauna-card" style="border-left-color:#c8971e"><h4>Cultural Ecology</h4><p>The Malana community's relationship with this land is centuries-old. Bhagdi is described as "sacred" — shepherds live here all summer. The untouched nature of the valley is partly a result of Malana's traditional conservation ethic and restricted access culture.</p></div>
+    </div>
+  </div>
+  <div class="tip-box">Carry binoculars (listed in pack list as optional). The bird-watching and wildflower photography opportunities on this trek are exceptional — especially Days 4 and 5.</div>
+</div>
+
+<!-- WHAT TO PACK -->
+<div class="section" id="pack">
+  <div class="sec-label">Gear Guide</div>
+  <div class="sec-title">What to Pack for the Devroopa Trek</div>
+  <div class="sec-desc">Complete packing list from the official PDF. Items marked with quantities follow the "one per X days of trekking" formula used by Pajuna.</div>
+  <div class="pack-grid">
+    <div class="pack-cat">
+      <h4><i class="ti ti-backpack" style="color:var(--navy)" aria-hidden="true"></i> Essential Gear</h4>
+      <div class="pack-item"><span>Rucksack bag with rain cover</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Head torch with spare batteries</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>UV protection sunglasses</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Reusable water bottle (no plastic)</span><span class="pack-qty">×1</span></div>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-shoe" style="color:var(--navy)" aria-hidden="true"></i> Footwear</h4>
+      <div class="pack-item"><span>High-ankle trekking shoes (non-skid, deep-tread)</span><span class="pack-qty">×1 pair</span></div>
+      <div class="pack-item"><span>Lightweight slippers/sandals</span><span class="pack-qty">×1 pair</span></div>
+      <div class="pack-item"><span>Thick woollen socks</span><span class="pack-qty">1 pair / 2 days</span></div>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-shirt" style="color:var(--navy)" aria-hidden="true"></i> Clothing</h4>
+      <div class="pack-item"><span>Quick-dry warm lower / track pants</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Full-sleeve T-shirts / sweatshirts</span><span class="pack-qty">1 / 2 days</span></div>
+      <div class="pack-item"><span>Thermal body warmer (upper & lower)</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Warm jacket (closed wrist & neck)</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Full-sleeve sweater</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Rainwear (jacket & pants)</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Waterproof warm gloves</span><span class="pack-qty">×1 pair</span></div>
+      <div class="pack-item"><span>Woollen cap</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Sun-shielding hat</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Undergarments</span><span class="pack-qty">1 / day</span></div>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-first-aid-kit" style="color:var(--navy)" aria-hidden="true"></i> Toiletries</h4>
+      <div class="pack-item"><span>Personal toiletries kit (towel, TP, soap, toothbrush/paste, cold cream)</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Sunscreen lotion</span><span class="pack-qty">small pack</span></div>
+      <div class="pack-item"><span>Lip balm</span><span class="pack-qty">small pack</span></div>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-id-badge" style="color:var(--navy)" aria-hidden="true"></i> Documents</h4>
+      <div class="pack-item"><span>Government ID (Aadhaar / Driving Licence)</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Personal & guardian contact number</span><span class="pack-qty">written copy</span></div>
+      <div class="pack-item"><span>Signed consent letter (provided by Pajuna)</span><span class="pack-qty">×1</span></div>
+      <div class="pack-item"><span>Email address on file with Pajuna</span><span class="pack-qty">–</span></div>
+    </div>
+    <div class="pack-cat">
+      <h4><i class="ti ti-dots-circle-horizontal" style="color:var(--navy)" aria-hidden="true"></i> Optional / Misc</h4>
+      <div class="pack-item"><span>Binoculars</span><span class="pack-qty">optional</span></div>
+      <div class="pack-item"><span>Camera</span><span class="pack-qty">optional</span></div>
+      <div class="pack-item"><span>Personal medicines (consult doctor first)</span><span class="pack-qty">plenty</span></div>
+      <div class="pack-item"><span>Dry fruits, nuts, chocolate bars</span><span class="pack-qty">optional</span></div>
+    </div>
+  </div>
+  <div class="tip-box">Note: Sleeping bag and insulation mattress are provided by Pajuna — do not pack your own unless you prefer extra warmth. Plastic water bottles and soft drinks are explicitly excluded and not permitted on this trek.</div>
+</div>
+
+<!-- FITNESS -->
+<div class="section" id="fitness">
+  <div class="sec-label">Trek Preparation</div>
+  <div class="sec-title">How to Get Fit for the Devroopa Trek</div>
+  <div class="sec-desc">A 6-week fitness plan to prepare your body for 5–7 km daily at altitude with a 6–10 kg pack. Focus areas: cardiovascular base, leg strength, and core stability.</div>
+  <div class="fitness-week">
+    <div class="week-card"><div class="wk">Week 1</div><p>3× 30-min brisk walks. Build daily walking habit. Stretch hamstrings and calves daily. No elevation required yet.</p></div>
+    <div class="week-card"><div class="wk">Week 2</div><p>3× 40-min walks with light incline (stairs, ramps). Add 20 bodyweight squats daily. Introduce light jogging intervals.</p></div>
+    <div class="week-card"><div class="wk">Week 3</div><p>2× 5km jogs + 1× weekend hike (local hill or park). Add lunges, step-ups. Begin carrying a 3 kg day pack on walks.</p></div>
+    <div class="week-card"><div class="wk">Week 4</div><p>3× 5km jogs. Weekend hike 8–10 km with 5 kg pack. Add plank holds (core for balance on uneven terrain). Stretch after every session.</p></div>
+    <div class="week-card"><div class="wk">Week 5</div><p>2× 6km jogs + 1× long hike 12–15 km with 6–8 kg pack. Elevation gain practice. Try stair climbs with pack if no hills nearby.</p></div>
+    <div class="week-card"><div class="wk">Week 6</div><p>Taper week. 2× easy 4km jogs. 1 gentle 6km walk. Rest legs 3 days before departure. Focus on sleep and hydration.</p></div>
+  </div>
+  <div class="tip-box">Key exercises for Devroopa specifically: squats (Day 4 ascent), calf raises (river crossing terrain), and breathing exercises (altitude above 4,000m requires efficient breathing). Practice deep belly breathing daily from Week 3.</div>
+  <div style="margin-top:1rem;display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+    <div class="detail-box"><div class="db-label">Minimum fitness standard</div><div class="db-val">Walk 8 km in 2.5 hrs without stopping</div></div>
+    <div class="detail-box"><div class="db-label">Altitude prep</div><div class="db-val">Sleep at 2,500m+ once before trek if possible (Kasol/Kheerganga night)</div></div>
+  </div>
+</div>
+
+<!-- BOOKING -->
+<div class="section" id="booking">
+  <div class="sec-label">Costs & Policies</div>
+  <div class="sec-title">Booking, Cost & Cancellation</div>
+  <div class="sec-desc">Complete financial information directly from the Pajuna Treks PDF.</div>
+
+  <div class="price-box">
+    <div style="font-size:.85rem;color:rgba(255,255,255,.7);margin-bottom:.25rem">Total Trek Cost (Per Person)</div>
+    <div class="pv">₹21,900</div>
+    <div class="ps">Advance: ₹7,000 on booking · Balance on arrival</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem" class="incl-grid">
+    <div>
+      <div class="sec-label" style="margin-bottom:.5rem">Included</div>
+      <ul class="incl-list">
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>Delhi-to-Delhi private taxi & Bolero Tempo (all 7 days)</li>
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>Day 2 homestay accommodation (twin sharing)</li>
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>Days 3–5 glamping tents (twin sharing)</li>
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>Sleeping bag, insulation mattress, tent</li>
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>First aid box</li>
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>Pajuna bio-toilet tents at camps</li>
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>Trek guide, cook and porters</li>
+        <li><span class="check-icon"><i class="ti ti-check" aria-hidden="true"></i></span>All meals: Day 1 dinner → Day 6 breakfast (5 types of meals daily)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="sec-label" style="margin-bottom:.5rem">Excluded</div>
+      <ul class="incl-list">
+        <li><span class="cross-icon"><i class="ti ti-x" aria-hidden="true"></i></span>Meals during road journeys</li>
+        <li><span class="cross-icon"><i class="ti ti-x" aria-hidden="true"></i></span>Any kind of insurance</li>
+        <li><span class="cross-icon"><i class="ti ti-x" aria-hidden="true"></i></span>Medical bills in case of emergency</li>
+        <li><span class="cross-icon"><i class="ti ti-x" aria-hidden="true"></i></span>Plastic mineral water bottles/soft drinks</li>
+        <li><span class="cross-icon"><i class="ti ti-x" aria-hidden="true"></i></span>Personal luggage porterage during trek</li>
+        <li><span class="cross-icon"><i class="ti ti-x" aria-hidden="true"></i></span>Rental of personal equipment</li>
+        <li><span class="cross-icon"><i class="ti ti-x" aria-hidden="true"></i></span>Any cost from unforeseen circumstances (weather, landslides)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec-label" style="margin-bottom:.5rem">Cancellation Policy</div>
+  <div class="cancel-card"><h4>Booking amount (₹7,000)</h4><p>Non-refundable under all circumstances.</p></div>
+  <div class="cancel-card"><h4>Within 14 days of departure (0–14 days)</h4><p>100% of total cost charged as cancellation fee.</p></div>
+  <div class="cancel-card"><h4>15+ days before departure</h4><p>50% of total cost charged as cancellation fee.</p></div>
+  <div class="cancel-card"><h4>Personal / medical emergency</h4><p>No refund will be processed regardless of reason.</p></div>
+  <div class="cancel-card" style="background:#e8f4ec;border-left-color:var(--sage)"><h4 style="color:var(--sage)">Weather / natural disaster cancellation</h4><p>Operator will attempt alternate activity or refund up to 50%. Policy applies to total cost, not advance.</p></div>
+
+  <div class="divider"></div>
+  <div class="contact-card">
+    <h3>Book With Pajuna Treks</h3>
+    <div>
+      <span class="contact-item"><i class="ti ti-phone" aria-hidden="true"></i>98345-47114</span>
+      <span class="contact-item"><i class="ti ti-phone" aria-hidden="true"></i>89286-07847</span>
+      <span class="contact-item"><i class="ti ti-mail" aria-hidden="true"></i>pajunatreks@gmail.com</span>
+      <span class="contact-item"><i class="ti ti-brand-instagram" aria-hidden="true"></i>@pajunatreks</span>
+    </div>
+    <div style="margin-top:1rem;font-size:.8rem;color:rgba(255,255,255,.6)">Bank: Paras Balpande · A/C 45110100006480 · IFSC: BARB0ANANTN · Branch: Anant Nagar · UPI: 8928607847@ybl</div>
+  </div>
+</div>
+
+<script>
+  const nav = document.getElementById('nav');
+  nav.addEventListener('click', e => {
+    const btn = e.target.closest('.nav-btn');
+    if(!btn) return;
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.sec).classList.add('active');
+  });
+  function toggleDay(hd) {
+    const detail = hd.nextElementSibling;
+    const arrow = hd.querySelector('.day-arrow i');
+    const isOpen = detail.classList.contains('open');
+    detail.classList.toggle('open', !isOpen);
+    arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+  }
+</script>
